@@ -1,8 +1,8 @@
-name: Build APK
+name: build-android
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -10,31 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v2
-      with:
-        java-version: 17
-        distribution: 'adopt'
-        cache: 'gradle'
-
-    - name: Accept licenses
-      run: yes | sdkmanager --licenses
-
-    - name: Install Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Install dependencies
       run: |
-        pip install kivy
-        pip3 install --user --upgrade buildozer
-        sudo apt update
-        sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-        pip3 install --user --upgrade Cython==0.29.23 virtualenv
+        sudo apt-get update
+        sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+
+    - name: Accept Android licenses
+      run: yes | sdkmanager --licenses
+
+    - name: Install Cython
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --user --upgrade Cython==0.29.24 virtualenv
+
+    - name: Install Buildozer
+      run: |
+        python3 -m pip install --user --upgrade buildozer
 
     - name: Build APK
       run: |
-        buildozer android debug
+        buildozer -v android debug
