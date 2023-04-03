@@ -27,8 +27,7 @@ jobs:
 
     - name: Build APK
       run: |
-        yes | sdkmanager --licenses # accept all sdk licenses
-        buildozer -v android debug
+        yes | buildozer -v android debug --accept-all
 
     - name: Create Release
       id: create_release
