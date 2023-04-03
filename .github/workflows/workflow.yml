@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
@@ -26,10 +27,6 @@ jobs:
       run: |
         python3 -m pip install --user --upgrade buildozer
 
-    - name: Accept all license agreements
-      run: |
-        yes | sdkmanager --licenses
-
     - name: Build APK
       run: |
-        buildozer -v android debug
+        yes | buildozer -v android debug --accept-all
