@@ -1,4 +1,4 @@
-name: Build Kivy App for Android
+name: build-android
 
 on:
   push:
@@ -6,19 +6,27 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: |
-          pip install kivy
-          pip3 install --user --upgrade buildozer
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-          pip3 install --user --upgrade Cython==0.29.33 virtualenv
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
-      - name: Build APK
-        run: |
-          buildozer -v android debug
+    - name: Install Cython
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install --user --upgrade Cython==0.29.24 virtualenv
+
+    - name: Install Buildozer
+      run: |
+        python3 -m pip install --user --upgrade buildozer
+
+    - name: Build APK
+      run: |
+        buildozer -v android debug
